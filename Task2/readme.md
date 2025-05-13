@@ -30,8 +30,9 @@ This helps ensure the correctness of the landmark detection.
 <p align="center">
 <img src="./output/point_cloud_2.png" width="900">
 </p>
+
 <p align="center">
-<img src="./output/DICOM" width="900">
+<img src="./output/DICOM.png" width="900">
 </p>
 ## Demo
 
