@@ -23,17 +23,11 @@ This helps ensure the correctness of the landmark detection.
 
 **Figure:** Red sphere indicating detected nose tip.
 
-<p align="center">
-<img src="./output/point_cloud_1.png" width="900">
-</p>
+| point_cloud_1.png | point_cloud_2.png | DICOM.png |
+|:-----------------:|:-----------------:|:---------:|
+| <img src="./output/point_cloud_1.png" width="300"> | <img src="./output/point_cloud_2.png" width="300"> | <img src="./output/DICOM.png" width="300"> |
 
-<p align="center">
-<img src="./output/point_cloud_2.png" width="900">
-</p>
 
-<p align="center">
-<img src="./output/DICOM.png" width="900">
-</p>
 ## Demo
 
 A working demo of the entire pipeline is available in the Jupyter notebook here:  
