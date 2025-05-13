@@ -30,7 +30,7 @@ This helps ensure the correctness of the landmark detection.
 ## Demo
 
 A working demo of the entire pipeline is available in the Jupyter notebook here:  
-🔗 [https://github.com/TapasKumarDutta1/Tasks/blob/main/Task2/Task_2_Demo.ipynb](Task_2_Demo.ipynb)
+🔗 [Task_2_Demo.ipynb](https://github.com/TapasKumarDutta1/Tasks/blob/main/Task2/Task_2_Demo.ipynb)
 
 ---
 
