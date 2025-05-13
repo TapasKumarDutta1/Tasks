@@ -1,37 +1,46 @@
 # Task 2: Landmark Detection on a 3D Facial Point Cloud
 
 ## Objective
-Detect the **tip of the nose** from a 3D facial point cloud reconstructed from DICOM medical imaging data.
+Detect the **tip of the nose** from a 3D facial point cloud.
 
 ---
 
 ## Approach
 
-1. **3D Volume Reconstruction**
-   - Load and sort DICOM slices.
-   - Convert pixel data to Hounsfield Units (HU).
-   - Extract a 3D surface using the Marching Cubes algorithm.
-
-2. **Point Cloud Generation**
-   - Convert surface mesh vertices to a point cloud using Open3D.
-   - Apply orientation correction from DICOM metadata.
-   - Denoise using DBSCAN clustering to isolate the facial region.
-
-3. **Landmark Detection**
+1. **Landmark Detection**
    - Center the point cloud.
    - Identify the nose tip as the point with **maximum Z-coordinate** (most protruding).
 
-4. **Visualization**
+2. **Visualization**
    - Overlay a red sphere at the detected nose tip for verification.
+
+
+## Visualization
+
+A red sphere is overlaid at the detected nose tip for visual verification.
+
+This helps ensure the correctness of the landmark detection.
+
+**Figure:** Red sphere indicating detected nose tip.
+
+<p align="center">
+<img src="./static/teaser.png" width="900">
+</p>
+
+## Demo
+
+A working demo of the entire pipeline is available in the Jupyter notebook here:  
+🔗 [https://github.com/TapasKumarDutta1/Tasks/blob/main/Task2/Task_2_Demo.ipynb](Task_2_Demo.ipynb)
 
 ---
 
-## Usage
+## Challenges Encountered
 
-### Requirements
-- Python 3.8+
-- Dependencies: `open3d`, `pydicom`, `numpy`, `scikit-image`
+### Pretrained Models
+- Attempted to use pretrained landmark detection models.
+- These produced inaccurate results in 3D space.
 
-Install dependencies:
-```bash
-pip install open3d pydicom numpy scikit-image
+### Curvature-Based Heuristic
+- Tried identifying the nose tip as the point of maximum curvature.
+- This often misidentified points around the neck region due to local shape variations.
+
