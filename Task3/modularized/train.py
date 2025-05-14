@@ -44,9 +44,10 @@ def plot_results():
     plt.plot(results.index + 1, results['metrics/mAP50-95(B)'], label='mAP@0.5:0.95')
     plt.xlabel('Epoch')
     plt.ylabel('mAP')
-    plt.title('YOLO Training Accuracy')
+    plt.title('YOLO Training')
     plt.grid(True)
     plt.legend()
+    plt.savefig("training_metrics.png")  # Or any filename you prefer
     plt.show()
 
 if __name__ == '__main__':
