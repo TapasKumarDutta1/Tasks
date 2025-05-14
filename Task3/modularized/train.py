@@ -1,4 +1,3 @@
-%%writefile train.py
 import os
 from utils.file_utils import load_ids
 from data.prepare_data import parse_annotations, save_yolo_format
