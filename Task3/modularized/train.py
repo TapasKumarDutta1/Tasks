@@ -1,11 +1,11 @@
 import os
-from utils.file_utils import load_ids
-from data.prepare_data import parse_annotations, save_yolo_format
-from ultralytics import YOLO
-import pandas as pd
-from glob import glob
-import matplotlib.pyplot as plt
 import argparse
+import pandas as pd
+import matplotlib.pyplot as plt
+from glob import glob
+from ultralytics import YOLO
+from utils.file_utils import load_ids, extract_number_from_string
+from data.prepare_data import parse_annotations, save_yolo_format
 
 def prepare_dataset(dataset_path):
     df = parse_annotations(dataset_path)
@@ -18,7 +18,7 @@ def prepare_dataset(dataset_path):
     save_yolo_format(df[df['img_id'].isin(val_ids)], 'val')
     save_yolo_format(df[df['img_id'].isin(test_ids)], 'test')
 
-def write_dataset_yaml():
+def write_dataset_yaml(output_path='datasets.yaml'):
     yaml_content = '''path: surgerical_tools
 train: train/images
 val: val/images
@@ -26,16 +26,23 @@ test: test/images
 nc: 7
 names: [Bipolar, SpecimenBag, Grasper, Irrigator, Scissors, Hook, Clipper]
 '''
-    with open('datasets.yaml', 'w') as f:
+    with open(output_path, 'w') as f:
         f.write(yaml_content)
 
-def train_model():
-    model = YOLO('yolov8s.pt')  # Use a valid YOLOv8 model file
+def train_model(args):
+    model = YOLO(args.model_weights)
     os.environ['WANDB_MODE'] = 'offline'
-    model.train(data='datasets.yaml', epochs=2, batch=16, device='cuda', imgsz=640, cache=True)
+
+    model.train(
+        data=args.data_yaml,
+        epochs=args.epochs,
+        batch=args.batch_size,
+        device=args.device,
+        imgsz=args.imgsz,
+        cache=args.cache
+    )
 
 def plot_results():
-    from utils.file_utils import extract_number_from_string
     log_dir = max(glob('runs/detect/train*'), key=extract_number_from_string)
     results = pd.read_csv(os.path.join(log_dir, 'results.csv'))
 
@@ -46,16 +53,24 @@ def plot_results():
     plt.title('YOLO Training')
     plt.grid(True)
     plt.legend()
-    plt.savefig("training_metrics.png")  # Or any filename you prefer
+    plt.savefig("training_metrics.png")
     plt.show()
 
 if __name__ == '__main__':
-    
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset-path', type=str, required=True, help="Path to the trained YOLO model weights")
+    parser = argparse.ArgumentParser(description="Train YOLO model with user-defined hyperparameters")
+
+    parser.add_argument('--dataset-path', type=str, required=True, help="Path to dataset root directory")
+    parser.add_argument('--model-weights', type=str, default='yolov8s.pt', help="Path to pretrained YOLO weights")
+    parser.add_argument('--data-yaml', type=str, default='datasets.yaml', help="Path to YOLO data config YAML")
+    parser.add_argument('--epochs', type=int, default=2, help="Number of training epochs")
+    parser.add_argument('--batch-size', type=int, default=16, help="Training batch size")
+    parser.add_argument('--device', type=str, default='cuda', help="Device to use: 'cuda' or 'cpu'")
+    parser.add_argument('--imgsz', type=int, default=640, help="Input image size for training")
+    parser.add_argument('--cache', type=bool, default=True, help="Whether to cache images for training")
+
     args = parser.parse_args()
-    
+
     prepare_dataset(args.dataset_path)
-    write_dataset_yaml()
-    train_model()
+    write_dataset_yaml(args.data_yaml)
+    train_model(args)
     plot_results()
