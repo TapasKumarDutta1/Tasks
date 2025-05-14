@@ -17,7 +17,7 @@ def main():
     # Argument parsing for model path, dataset YAML, video input/output, and CSV (optional)
     parser = argparse.ArgumentParser()
     parser.add_argument('--model-path', type=str, help="Path to the trained YOLO model weights")
-    parser.add_argument('--data-yaml', type=str, default='datasets.yaml', help="Path to the dataset YAML file")
+    parser.add_argument('--data-yaml', type=str, help="Path to the dataset YAML file")
     parser.add_argument('--video-path', type=str, help="Path to the input video for annotation")
     parser.add_argument('--video-output', type=str, default='annotated_output.mp4', help="Path to save the annotated video")
     args = parser.parse_args()
