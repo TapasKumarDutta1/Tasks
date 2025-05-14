@@ -1,3 +1,4 @@
+%%writefile train.py
 import os
 from utils.file_utils import load_ids
 from data.prepare_data import parse_annotations, save_yolo_format
@@ -5,9 +6,9 @@ from ultralytics import YOLO
 import pandas as pd
 from glob import glob
 import matplotlib.pyplot as plt
+import argparse
 
-def prepare_dataset():
-    dataset_path = '/kaggle/input/surgerical-tools/m2cai16-tool-locations/m2cai16-tool-locations'
+def prepare_dataset(dataset_path):
     df = parse_annotations(dataset_path)
 
     train_ids = load_ids(os.path.join(dataset_path, 'ImageSets/Main/train.txt'))
@@ -49,7 +50,12 @@ def plot_results():
     plt.show()
 
 if __name__ == '__main__':
-    prepare_dataset()
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--dataset-path', type=str, required=True, help="Path to the trained YOLO model weights")
+    args = parser.parse_args()
+    
+    prepare_dataset(args.dataset_path)
     write_dataset_yaml()
     train_model()
     plot_results()
