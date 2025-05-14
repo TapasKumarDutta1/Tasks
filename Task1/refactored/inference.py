@@ -1,152 +1,110 @@
 import argparse
+import os
 import torch
 import numpy as np
-import matplotlib.pyplot as plt
-import segmentation_models_pytorch as smp
+import nibabel as nib
 from torch.utils.data import DataLoader
-
-from dataset import VolumeSliceDataset
-from utils import evaluate_model
+import segmentation_models_pytorch as smp
 
 
-def visualize_predictions(model, dataloader, device, num_samples=5):
+def run_inference_on_volume(model, volume, device):
     """
-    Visualize model predictions alongside ground truth masks.
-    
+    Run inference on all slices of a 3D volume.
+
     Args:
-        model (nn.Module): Trained PyTorch model
-        dataloader (DataLoader): DataLoader containing test data
-        device (str): Device to run inference on
-        num_samples (int): Number of samples to visualize
+        model (torch.nn.Module): Trained segmentation model.
+        volume (np.ndarray): 3D numpy array of shape (D, H, W).
+        device (str): Computation device.
+
+    Returns:
+        np.ndarray: Predicted segmentation mask volume of shape (D, H, W).
     """
     model.eval()
     model.to(device)
-    
-    fig, axes = plt.subplots(num_samples, 3, figsize=(15, num_samples * 5))
-    
-    if num_samples == 1:
-        axes = axes.reshape(1, -1)
-    
-    sample_idx = 0
+
+    pred_masks = []
+
     with torch.no_grad():
-        for images, masks in dataloader:
-            if sample_idx >= num_samples:
-                break
-                
-            # Get a random slice from the batch
-            batch_size = images.size(0)
-            slice_idx = np.random.randint(0, images.size(1))
-            
-            # Get the image and mask
-            image = images[0, slice_idx].unsqueeze(0).to(device)
-            mask = masks[0, slice_idx].numpy()
-            
-            # Make prediction
-            output = model(image)
-            pred_mask = torch.sigmoid(output).cpu().numpy()[0, 0]
-            pred_mask_binary = (pred_mask > 0.5).astype(np.uint8)
-            
-            # Display results
-            axes[sample_idx, 0].imshow(image.cpu().numpy()[0, 0], cmap='gray')
-            axes[sample_idx, 0].set_title('Input Image')
-            axes[sample_idx, 0].axis('off')
-            
-            axes[sample_idx, 1].imshow(mask[0], cmap='gray')
-            axes[sample_idx, 1].set_title('Ground Truth')
-            axes[sample_idx, 1].axis('off')
-            
-            axes[sample_idx, 2].imshow(pred_mask_binary, cmap='gray')
-            axes[sample_idx, 2].set_title('Prediction')
-            axes[sample_idx, 2].axis('off')
-            
-            sample_idx += 1
-    
-    plt.tight_layout()
-    plt.savefig('prediction_visualization.png')
-    plt.show()
+        for slice_ in volume:
+            slice_ = slice_/np.max(slice_)
+            input_tensor = torch.from_numpy(slice_).unsqueeze(0).unsqueeze(0).float().to(device)  # shape: (1, 1, H, W)
+            output = model(input_tensor)
+            pred = torch.sigmoid(output).cpu().numpy()[0, 0] > 0.5
+            pred_masks.append(pred.astype(np.uint8))
+
+    return np.stack(pred_masks)
 
 
 def get_args():
-    """
-    Parse command line arguments.
-    
-    Returns:
-        argparse.Namespace: Parsed arguments
-    """
-    parser = argparse.ArgumentParser(description='Medical Image Segmentation Inference')
-    
-    # Data paths
-    parser.add_argument('--images-dir', type=str, required=True,
-                        help='Directory containing image volumes')
-    parser.add_argument('--masks-dir', type=str, required=True,
-                        help='Directory containing segmentation masks')
-    parser.add_argument('--test-ids', type=str, nargs='+', required=True,
-                        help='List of patient IDs for testing')
-    
-    # Model parameters
-    parser.add_argument('--checkpoint', type=str, required=True,
-                        help='Path to trained model checkpoint')
-    parser.add_argument('--encoder', type=str, default='resnet50',
-                        help='Encoder backbone used in the U-Net model')
-    
-    # Image preprocessing
-    parser.add_argument('--img-size', type=int, default=128,
-                        help='Target size for image resizing')
-    
-    # Device settings
-    parser.add_argument('--device', type=str, default='cuda' if torch.cuda.is_available() else 'cpu',
-                        help='Device to use for inference (cuda or cpu)')
-    
-    # Visualization
-    parser.add_argument('--visualize', action='store_true',
-                        help='Visualize model predictions')
-    parser.add_argument('--num-samples', type=int, default=5,
-                        help='Number of samples to visualize')
-    
+    parser = argparse.ArgumentParser(description='Run segmentation on a single 3D image volume')
+
+    parser.add_argument('--images-dir', type=str, required=True, help='Directory containing image volumes')
+    parser.add_argument('--masks-dir', type=str, required=True, help='Directory containing image volumes')
+    parser.add_argument('--checkpoint', type=str, required=True, help='Path to trained model checkpoint')
+    parser.add_argument('--encoder', type=str, default='resnet50', help='Encoder backbone used in the U-Net model')
+    parser.add_argument('--img-size', type=int, default=128, help='Target size for image resizing')
+    parser.add_argument('--patient-id', type=str, required=True, help='Patient ID to run inference on')
+    parser.add_argument('--output-dir', type=str, required=True, help='Directory to save output segmentation')
+    parser.add_argument('--device', type=str, default='cuda' if torch.cuda.is_available() else 'cpu')
+
     return parser.parse_args()
 
 
 def main():
-    """
-    Main function to run the inference pipeline.
-    """
-    # Parse arguments
     args = get_args()
-    
-    # Create test dataset and dataloader
-    test_dataset = VolumeSliceDataset(
-        args.images_dir, 
-        args.masks_dir, 
-        args.test_ids, 
-        target_shape=(args.img_size, args.img_size)
-    )
-    
-    test_loader = DataLoader(
-        test_dataset, 
-        batch_size=1, 
-        shuffle=False, 
-        num_workers=4
-    )
-    
-    # Create model
+
+    image_path = os.path.join(args.images_dir, f"{args.patient_id}_image.nii")
+    if not os.path.exists(image_path):
+        raise FileNotFoundError(f"Volume for patient ID {args.patient_id} not found at {image_path}")
+
+    # Load and preprocess volume
+    volume_nifti = nib.load(image_path)
+    volume = volume_nifti.get_fdata()
+    volume_preprocessed = volume
+
+    # Load model
     model = smp.Unet(
         encoder_name=args.encoder,
-        encoder_weights=None,  # No need for pretrained weights during inference
+        encoder_weights=None,
         in_channels=1,
         classes=1,
     )
-    
-    # Load trained model
-    model.load_state_dict(torch.load(args.checkpoint))
+    model.load_state_dict(torch.load(args.checkpoint, map_location=args.device))
     model.to(args.device)
+
+    # Run inference
+    pred_volume = run_inference_on_volume(model, volume_preprocessed, args.device)
+
+
+    mask_path = os.path.join(args.masks_dir, f"{args.patient_id}_label.nii")
+    mask_nifti = nib.load(mask_path)
+    mask_volume = mask_nifti.get_fdata().astype(np.uint8)
+    # mask_volume_resized = preprocess_volume(mask_volume, target_shape=(args.img_size, args.img_size))  # shape: (D, H, W)
+
+    # Ensure shapes match
+    mask_volume_resized = mask_volume
+    print(pred_volume.shape, mask_volume_resized.shape)
+        
+    # Compute Dice and IoU
+    intersection = np.logical_and(pred_volume, mask_volume_resized).sum()
+    union = np.logical_or(pred_volume, mask_volume_resized).sum()
+    pred_sum = pred_volume.sum()
+    gt_sum = mask_volume_resized.sum()
+
+    dice = (2. * intersection) / (pred_sum + gt_sum + 1e-8)
+    iou = intersection / (union + 1e-8)
+
+    print(f"Patient {args.patient_id} - Dice: {dice:.4f}, IoU: {iou:.4f}")
+
+
     
-    # Evaluate model
-    iou, dice = evaluate_model(model, test_loader, args.device)
-    print(f"Test Results - IoU: {iou:.4f}, Dice: {dice:.4f}")
-    
-    # Visualize predictions if requested
-    if args.visualize:
-        visualize_predictions(model, test_loader, args.device, args.num_samples)
+    # Save prediction as a Nifti file
+    pred_nifti = nib.Nifti1Image(pred_volume.astype(np.uint8), affine=volume_nifti.affine)
+    os.makedirs(args.output_dir, exist_ok=True)
+    output_path = os.path.join(args.output_dir, f"{args.patient_id}_seg.nii")
+    nib.save(pred_nifti, output_path)
+
+    print(f"Saved predicted segmentation volume to {output_path}")
 
 
 if __name__ == "__main__":
