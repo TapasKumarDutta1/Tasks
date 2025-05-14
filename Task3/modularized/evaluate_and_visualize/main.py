@@ -2,7 +2,7 @@
 import argparse
 from utils import load_model
 from evaluate import evaluate_model
-from visualize2 import visualize_predictions
+from visualize import visualize_predictions
 from annotate import annotate_video
 class_dict = {
     0: "Bipolar",
