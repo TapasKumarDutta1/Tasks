@@ -18,17 +18,12 @@ Detect surgerical tools in images and videos.
    2. Running the trained model on test data and video.
 
 ## Results
+<img src="./static/results.png" width=900>
 
-| Class         | Images | Instances | Box(P) | Box(R) | mAP50 | mAP95 |
-|---------------|--------|-----------|--------|--------|-------|-------|
-| all           | 563    | 780       | 0.709  | 0.65   | 0.729 | 0.383 |
-| Bipolar       | 95     | 95        | 0.815  | 0.789  | 0.844 | 0.421 |
-| SpecimenBag   | 96     | 96        | 0.597  | 0.656  | 0.669 | 0.356 |
-| Grasper       | 234    | 293       | 0.586  | 0.807  | 0.74  | 0.359 |
-| Irrigator     | 84     | 84        | 0.592  | 0.675  | 0.696 | 0.325 |
-| Scissors      | 84     | 84        | 0.901  | 0.434  | 0.692 | 0.336 |
-| Hook          | 64     | 64        | 0.862  | 0.562  | 0.794 | 0.475 |
-| Clipper       | 64     | 64        | 0.61   | 0.625  | 0.671 | 0.411 |
+| Confusion Matrix Normalized | PR_Curve |
+|:-----------------:|:-----------------:|:---------:|
+| <img src="./static/confusion_matrix_normalized.png" width="450"> | <img src="./static/PR_Curve.png" width="450"> |
+
 
 
 ## Visualization
