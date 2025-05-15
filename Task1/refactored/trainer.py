@@ -132,7 +132,7 @@ class Trainer:
         Args:
             path (str): Path to load the checkpoint from
         """
-        self.model.load_state_dict(torch.load(path))
+        self.model.load_state_dict(torch.load(path), strict=False)
         print(f"Model checkpoint loaded from {path}")
     
     def train(self, epochs=5):
