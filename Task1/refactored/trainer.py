@@ -175,7 +175,5 @@ class Trainer:
         print("\nTraining completed. Loading best model for testing...")
         self.load_checkpoint(self.best_checkpoint_path)
         
-        test_iou, test_dice = self.test()
-        print(f"Test IoU: {test_iou:.4f}, Dice: {test_dice:.4f}")
         
         return history
