@@ -22,7 +22,7 @@ Detect surgerical tools in images and videos.
 
 | Confusion Matrix Normalized | PR_Curve |
 |:-----------------:|:-----------------:|
-| <img src="./static/confusion_matrix_normalized.png" width="450"> | <img src="./static/confusion_matrix_normalized.png" width="450"> |
+| <img src="./static/confusion_matrix_normalized.png" width="450"> | <img src="./static/PR_curve.png" width="450"> |
 
 
 
