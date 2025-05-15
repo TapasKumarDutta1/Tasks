@@ -8,8 +8,8 @@ Detect surgerical tools in images and videos.
 
 
 1. **Dataset Preparation**:
-  1.   The Dataset consist of train, test and validation ids
-  2.   Convert the annotations from PASCAL VOC to YOLO format
+   1. The Dataset consist of train, test and validation ids
+   2.  Convert the annotations from PASCAL VOC to YOLO format
 2. **Model Training**:
    1. Fine-tuning YOLOv12 on the annotated dataset for accurate classification and localization of surgical instruments.
    2. Save the model's best weights for validation set
