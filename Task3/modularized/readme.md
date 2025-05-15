@@ -1,74 +1,36 @@
 # Surgery Instrument Object Detection Using YOLOv12
 
 ## Objective
-The goal of this project is to implement an efficient and accurate object detection system for identifying and classifying surgical instruments in medical environments. By leveraging YOLOv12, a state-of-the-art deep learning model, this system aims to assist healthcare professionals by automatically detecting instruments in real-time, aiding in surgical procedures, and improving workflow efficiency.
+Detect surgerical tools in images and videos.
+
 
 ## Approach
-The model uses YOLOv12 (You Only Look Once version 12), a cutting-edge, real-time object detection algorithm known for its speed and accuracy. The approach involves:
 
-1. **Dataset Preparation**: Collecting and annotating a dataset of surgical instruments, ensuring high-quality, labeled images for training.
+
+1. **Dataset Preparation**: Convert the annotations from PASCAL VOC to YOLO format
 2. **Model Training**: Fine-tuning YOLOv12 on the annotated dataset for accurate classification and localization of surgical instruments.
 3. **Inference and Evaluation**: Running the trained model on unseen data to test its performance and adjust hyperparameters as needed.
 
-## Visualization
-The trained YOLOv12 model outputs bounding boxes, class labels, and confidence scores for each detected surgical instrument. Visualizing these predictions on input images enables real-time monitoring and quality assessment.
+## Results
 
-### Example:
-- **Input Image**: A photo of a surgical table with multiple instruments.
-- **Output Image**: The same image with bounding boxes drawn around the instruments, each labeled with its predicted class (e.g., scalpel, forceps, etc.) and a confidence score.
+| Class         | Images | Instances | Box(P) | Box(R) | mAP50 | m |
+|---------------|--------|-----------|--------|--------|-------|-------|
+| all           | 563    | 780       | 0.709  | 0.65   | 0.729 | 0.383 |
+| Bipolar       | 95     | 95        | 0.815  | 0.789  | 0.844 | 0.421 |
+| SpecimenBag   | 96     | 96        | 0.597  | 0.656  | 0.669 | 0.356 |
+| Grasper       | 234    | 293       | 0.586  | 0.807  | 0.74  | 0.359 |
+| Irrigator     | 84     | 84        | 0.592  | 0.675  | 0.696 | 0.325 |
+| Scissors      | 84     | 84        | 0.901  | 0.434  | 0.692 | 0.336 |
+| Hook          | 64     | 64        | 0.862  | 0.562  | 0.794 | 0.475 |
+| Clipper       | 64     | 64        | 0.61   | 0.625  | 0.671 | 0.411 |
+
+
+## Visualization
+### Images
+### Videos
+
 
 ## Demo
-To run the demo and visualize object detection in action, follow these steps:
+A working demo of the entire pipeline is available in the Jupyter notebook here:
 
-### Requirements
-- Python 3.x
-- YOLOv12 model and weights
-- OpenCV, PyTorch, and other dependencies (refer to `requirements.txt`)
-
-### Instructions:
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/yourusername/surgery-instrument-detection.git
-    cd surgery-instrument-detection
-    ```
-
-2. Install dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-3. Run the detection script:
-    ```bash
-    python detect.py --input path_to_image_or_video --output path_to_save_results
-    ```
-
-4. View the output:
-   - The results will be saved as images or videos with visualized detections, including bounding boxes and class labels.
-
-## Code Example
-Here is a sample Python script to perform object detection:
-
-```python
-import cv2
-from yolov12 import YOLOv12
-
-# Load YOLOv12 model
-model = YOLOv12(weights="yolov12.weights")
-
-# Load an image
-image = cv2.imread("surgical_scene.jpg")
-
-# Perform inference
-results = model.detect(image)
-
-# Visualize results
-for box, label, score in zip(results['boxes'], results['labels'], results['scores']):
-    x1, y1, x2, y2 = box
-    cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
-    cv2.putText(image, f"{label}: {score:.2f}", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 0, 0), 2)
-
-# Save and show the output image
-cv2.imwrite("output_image.jpg", image)
-cv2.imshow("Detection Results", image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+🔗 [Task_2_Demo.ipynb]([https://github.com/TapasKumarDutta1/Tasks/blob/main/Task2/Task_2_Demo.ipynb](https://www.kaggle.com/code/tapaskd123/task-1-final-run-100?scriptVersionId=239962497))
