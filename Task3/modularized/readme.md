@@ -27,6 +27,13 @@ Detect surgerical tools in images and videos.
 
 
 ## Visualization
+
+<img src="./static/val_batch0_pred.jpg" width=900>
+<img src="./static/val_batch1_pred.jpg" width=900>
+<img src="./static/val_batch2_pred.jpg" width=900>
+
+
+
 ### Images
 ### Videos
 
