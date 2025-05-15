@@ -13,7 +13,7 @@ Detect surgerical tools in images and videos.
 
 ## Results
 
-| Class         | Images | Instances | Box(P) | Box(R) | mAP50 | m |
+| Class         | Images | Instances | Box(P) | Box(R) | mAP50 | mAP95 |
 |---------------|--------|-----------|--------|--------|-------|-------|
 | all           | 563    | 780       | 0.709  | 0.65   | 0.729 | 0.383 |
 | Bipolar       | 95     | 95        | 0.815  | 0.789  | 0.844 | 0.421 |
