@@ -15,7 +15,7 @@ Fine tuned model on Imagetbad dataset.
    1. The Dataset consist of split zip files so they first needs to be concatednated and unziped
    2. Split randomly in training, testing and validation splits in the ration 70:20:10
    3. Here are the notebooks to do so:
-      https://www.kaggle.com/code/howndown/compress-labels and https://www.kaggle.com/code/howndown/compress-images/notebook
+      https://www.kaggle.com/code/howndown/compress-labels and https://www.kaggle.com/code/howndown/compress-images
 2. **Model Training**:
    1. Fine-tuning UNet pretrained on vessel segmentation.
    2. Pretraining notebook: https://www.kaggle.com/code/chihjungwang/retina-segmentation-by-pytorch-f1-score-80
