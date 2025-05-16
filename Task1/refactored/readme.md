@@ -19,6 +19,10 @@ The dataset consists of annotated  true lumen (TL), false lumen (FL), and false 
 3. **Inference and Evaluation**:
    1. Load the best weights for validation set
    2. Running the trained model on test data.
+
+## Results
+The model achieves a Average Dice: 0.6606, Average IoU: 0.4962 on the test set
+
 ## Visualization
 
 ## Demo
