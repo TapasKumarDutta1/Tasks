@@ -29,5 +29,6 @@ The model achieves a Average Dice: 66.06, Average IoU: 49.62 on the test set
 <img src="./static/case_164_comparison.png" width="900">
 
 <img src="./static/case_27_comparison.png" width="900">
+
 ## Demo
 Demo of using the code: https://www.kaggle.com/code/howndown/final-training-working/notebook
