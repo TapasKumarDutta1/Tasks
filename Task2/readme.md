@@ -25,7 +25,7 @@ This helps ensure the correctness of the landmark detection.
 
 | point_cloud_1 | point_cloud_2 | DICOM |
 |:-----------------:|:-----------------:|:---------:|
-| <img src="./output/point_cloud_1.png" width="300"> | <img src="./output/point_cloud_2.png" width="300"> | <img src="./output/DICOM.png" width="300"> |
+| <img src="./static/point_cloud_1.png" width="300"> | <img src="./static/point_cloud_2.png" width="300"> | <img src="./static/DICOM.png" width="300"> |
 
 
 ## Demo
