@@ -4,7 +4,7 @@
 Segment **Vessel** from a 3D CTA data.
 
 ## Dataset Selection
-The dataset consists of annotated  true lumen (TL), false lumen (FL), and false lumen thrombus(FLT), whose top and bottom are around the neck and the brachiocephalic vessels, respectively, in the axial view.
+The dataset(https://www.kaggle.com/datasets/xiaoweixumedicalai/imagetbad) consists of annotated  true lumen (TL), false lumen (FL), and false lumen thrombus(FLT), whose top and bottom are around the neck and the brachiocephalic vessels, respectively, in the axial view.
 
 ## Approach
 1. **Dataset Preparation**:
