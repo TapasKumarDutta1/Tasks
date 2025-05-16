@@ -41,4 +41,4 @@ Detect surgerical tools in images and videos.
 
 ## Demo
 A working demo of the entire pipeline is available in the Jupyter notebook here:
-https://github.com/TapasKumarDutta1/Tasks/blob/main/Task2/Task_2_Demo.ipynb](https://www.kaggle.com/code/tapaskd123/task-1-final-run-100?scriptVersionId=239962497
+https://www.kaggle.com/code/tapaskd123/task-1-final-run-100?scriptVersionId=239962497
