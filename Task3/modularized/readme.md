@@ -37,7 +37,7 @@ Detect surgerical tools in images and videos.
 
 
 ### Videos
-The model achives approximately 50fps when working on videos, video link: 
+The model achives approximately 50fps when working on videos, video link: https://drive.google.com/file/d/11sigvA18y87uZ5d-PQiZHntiQqYoN43q/view?usp=sharing
 
 ## Demo
 A working demo of the entire pipeline is available in the Jupyter notebook here:
