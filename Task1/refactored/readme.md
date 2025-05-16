@@ -21,7 +21,7 @@ The dataset(https://www.kaggle.com/datasets/xiaoweixumedicalai/imagetbad) consis
    2. Running the trained model on test data.
 
 ## Results
-The model achieves a Average ``Dice: 66.06``, ``Average IoU: 49.62`` on the test set
+The model achieves a ``Average Dice: 66.06``, ``Average IoU: 49.62`` on the test set
 
 ## Visualization
 <img src="./static/case_155_comparison.png" width="900">
