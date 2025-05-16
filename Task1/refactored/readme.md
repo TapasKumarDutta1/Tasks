@@ -6,6 +6,10 @@ Segment **Vessel** from a 3D CTA data.
 ## Dataset Selection
 The dataset(https://www.kaggle.com/datasets/xiaoweixumedicalai/imagetbad) consists of annotated  true lumen (TL), false lumen (FL), and false lumen thrombus(FLT), whose top and bottom are around the neck and the brachiocephalic vessels, respectively, in the axial view.
 
+## Enhancements Made
+
+Fine tuned model on Imagetbad dataset.
+
 ## Approach
 1. **Dataset Preparation**:
    1. The Dataset consist of split zip files so they first needs to be concatednated and unziped
@@ -21,7 +25,7 @@ The dataset(https://www.kaggle.com/datasets/xiaoweixumedicalai/imagetbad) consis
    2. Running the trained model on test data.
 
 ## Results
-The model achieves a ``Average Dice: 66.06``, ``Average IoU: 49.62`` on the test set
+The model achieves a ``Average Dice: 66.06``, ``Average IoU: 49.62`` on the test set and each frame takes approximately ``0.0467 seconds``
 
 ## Visualization
 <img src="./static/case_155_comparison.png" width="900">
